@@ -12,11 +12,11 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = (
-    'beautifulsoup4 >= 4.6.0',
+    'beautifulsoup4>=4.6.0',
     'requests>=2.18.4',
     'PyPDF2>=1.26.0',
     'tablib==0.12.1',
-    'lxml >= 4.1.1',
+    'lxml>=4.1.1',
     'openpyxl==2.4.9',
 )
 

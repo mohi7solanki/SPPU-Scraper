@@ -11,6 +11,10 @@ Student = namedtuple('student', 'seat_no name mother_name')
 all_students = []
 
 
+class NoStudentsFoundError(Exception):
+    pass
+
+
 def save_match(all_matches):
     for match in all_matches:
         seat_no, name, mother_name = map(
@@ -26,6 +30,7 @@ def get_student_data(filepath):
         for page_no in range(pdf_reader.getNumPages()):
             page_obj = pdf_reader.getPage(page_no)
             data = page_obj.extractText()
-            all_matches = regex.findall(data)
-            save_match(all_matches)
+            save_match(regex.findall(data))
+    if not all_students:
+        raise NoStudentsFoundError('No student details found in the given file.')
     return all_students

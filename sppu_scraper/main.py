@@ -159,7 +159,7 @@ def get_valid_info():
 
     mode = input('\nThis pdf is from current or previous year? (current/previous): ')
     if mode not in ('current', 'previous'):
-        raise Exception('Try practicing typing current or previous a few times. :/')
+        raise Exception('Try practicing typing "current" or "previous" a few times. :/')
     return all_students, result_home_page, mode, res
 
 
