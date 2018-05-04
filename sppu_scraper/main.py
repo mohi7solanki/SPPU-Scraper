@@ -192,7 +192,7 @@ def scrape():
             all_clear = sum(1 for student in fetched_results if student.sgpa)
             for subject in backlog_stats:
                 sys.stdout.write('\n{} students have backlog in {}'.format(
-                    backlog_stats[subject], subject)
+                    str(backlog_stats[subject]).zfill(2), subject)
                 )
             sys.stdout.write('\n{} students are All Clear!\n\n'.format(all_clear))
     else:
