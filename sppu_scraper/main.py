@@ -1,4 +1,5 @@
 import sys
+import signal
 import threading
 import warnings
 from collections import namedtuple, Counter
@@ -24,6 +25,14 @@ result_fetched = set()
 next_year = {'F': 'S', 'S': 'T', 'T': 'B'}
 
 lock = threading.RLock()
+
+
+def keyboard_interrupt_handler(*args):
+    sys.stdout.write('\nPlease Wait... Exiting Gracefully!\n\n')
+    sys.exit()
+
+
+signal.signal(signal.SIGINT, keyboard_interrupt_handler)
 
 
 def get_student_report_card(soup):
@@ -202,9 +211,7 @@ def scrape():
 def main():
     try:
         scrape()
-    except KeyboardInterrupt:
-        sys.stdout.write('\nWait... Exiting Gracefully!\n\n')
-    except Exception as error:
-        sys.stdout.write('\nError: {}\n\n'.format(str(error)))
+    except Exception:
+        sys.stdout.out('\nSomething went wrong :/\n\n')
     finally:
         sys.exit()
