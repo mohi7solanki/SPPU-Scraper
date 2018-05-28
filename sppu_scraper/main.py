@@ -1,5 +1,5 @@
-import sys
 import signal
+import sys
 import threading
 import warnings
 from collections import namedtuple, Counter
@@ -16,7 +16,7 @@ from .utils import generate_form_data, save_result, sort_students
 
 
 # Supress openpyxl warnings.
-warnings.simplefilter("ignore", category=UserWarning)
+warnings.simplefilter('ignore', category=UserWarning)
 
 Result = namedtuple('result', 'seat_no name grades sgpa backlogs')
 
@@ -24,7 +24,9 @@ result_fetched = set()
 
 next_year = {'F': 'S', 'S': 'T', 'T': 'B'}
 
-lock = threading.RLock()
+lock = threading.Lock()
+
+TIMEOUT = 7
 
 
 def keyboard_interrupt_handler(*args):
@@ -81,10 +83,12 @@ def fetch_details(pg_source, seat_number):
 def get_result_current(student):
     form_data = generate_form_data(soup, student.seat_no, student.mother_name)
     try:
-        res = requests.post(result_home_page, data=form_data, timeout=7)
-    except Exception:
+        res = requests.post(result_home_page, data=form_data, timeout=TIMEOUT)
+        return True, fetch_details(res.text, student.seat_no)
+    except ConnectTimeout:
         return None, student
-    return True, fetch_details(res.text, student.seat_no)
+    except Exception:
+        return False, student
 
 
 def get_result_previous(student, search_space=None):
@@ -95,11 +99,11 @@ def get_result_previous(student, search_space=None):
         mother_name = student.mother_name
         form_data = generate_form_data(soup, seat_number, mother_name)
         try:
-            res = requests.post(result_home_page, data=form_data, timeout=7)
-        except Exception:
+            res = requests.post(result_home_page, data=form_data, timeout=TIMEOUT)
+        except ConnectTimeout:
             return None, student
         else:
-            if 'SUBJECT NAME' in res.text:
+            if 'SUBJECT NAME' in res.text:  # Maybe check length of respose to validate ?
                 lock.acquire()
                 if seat_number in result_fetched:
                     lock.release()
@@ -160,7 +164,7 @@ def get_valid_info():
 
     result_home_page = input('\nEnter the url of your result page: ')
     try:
-        res = requests.get(result_home_page, timeout=7)
+        res = requests.get(result_home_page, timeout=TIMEOUT)
     except (ConnectionError, ConnectTimeout):
         raise Exception('Please make sure your internet is working.')
     if not res.status_code == 200:
@@ -174,7 +178,11 @@ def get_valid_info():
 
 def scrape():
     global result_home_page, soup
-    all_students, result_home_page, mode, home_pg_src = get_valid_info()
+    try:
+        all_students, result_home_page, mode, home_pg_src = get_valid_info()
+    except Exception as exc:
+        sys.stdout.write('\nERROR: {}\n\n'.format(exc))
+        sys.exit()
     soup = BeautifulSoup(home_pg_src.text, 'lxml')
     sys.stdout.write('\nSit back and relax this will take a while...\n')
     func_map = {'current': get_result_current, 'previous': get_result_previous}
@@ -212,6 +220,6 @@ def main():
     try:
         scrape()
     except Exception:
-        sys.stdout.out('\nSomething went wrong :/\n\n')
+        sys.stdout.write('\nSomething went wrong :/\n\n')
     finally:
         sys.exit()

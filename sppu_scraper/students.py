@@ -17,9 +17,7 @@ class NoStudentsFoundError(Exception):
 
 def save_match(all_matches):
     for match in all_matches:
-        seat_no, name, mother_name = map(
-            lambda x: x.strip(), (match[0], match[1], match[2])
-        )
+        seat_no, name, mother_name = map(getattr(str, 'strip'), (*match,))
         student = Student(seat_no, name, mother_name)
         all_students.append(student)
 
