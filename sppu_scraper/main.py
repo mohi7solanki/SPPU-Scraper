@@ -38,7 +38,7 @@ signal.signal(signal.SIGINT, keyboard_interrupt_handler)
 
 
 def get_student_report_card(soup):
-    result_set, backlogs = [], []
+    result_set, backlogs, passed_subject, all_sub = [], [], [], []
     table = soup.find_all('table')[1]
     data = table.find_all('tr', {'align': 'LEFT'})
     sgpa = table.find_all('tr')[-3].text.strip().split(':-')[1].strip()
@@ -50,15 +50,39 @@ def get_student_report_card(soup):
         _type = all_td[3].text.strip()
         subject = all_td[2].text.strip()
         sub_dict = {}
-        sub_dict[subject] = {'type': _type, 'grade': grade, 'credits': credit_points}
+        _credit = all_td[4].text
+        if _type == 'AC':
+            continue
+        sub_dict[subject] = {
+            'type': _type,
+            'grade': grade,
+            'credits': credit_points,
+            '_credit': _credit,
+        }
         if grade == 'F':
             backlogs.append(subject)
+        else:
+            passed_subject.append(subject)
+        all_sub.append((subject, _type))
         result_set.append(sub_dict)
+    backlogs = [subject for subject in backlogs if subject not in passed_subject]
+    _result_set = []
+    _counter = Counter(all_sub)
+    for subject in result_set:
+        for subject_name, values in subject.items():
+            if not (
+                _counter[(subject_name, _type)] == 2
+                and not values['_credit'].startswith('*')
+            ):
+                _result_set.append(subject)
+    for subject in _result_set:
+        for key, value in subject.items():
+            value.pop('_credit')
     try:
         sgpa = float(sgpa)
     except ValueError:
         sgpa = 0
-    return name, result_set, sgpa, backlogs
+    return name, _result_set, sgpa, backlogs
 
 
 def get_search_space(seat_number):
@@ -188,7 +212,6 @@ def scrape():
     func_map = {'current': get_result_current, 'previous': get_result_previous}
     max_workers = 20 if mode == 'previous' else 30
     fetched_results = scrap_result(all_students, func_map[mode], max_workers=max_workers)
-
     if fetched_results:
         sort_by = input(
             '\nDo you want to sort the students by SGPA or Seat Number? (sgpa/seat_no): '
