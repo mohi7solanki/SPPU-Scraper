@@ -2,6 +2,7 @@ import re
 from collections import namedtuple
 
 import PyPDF2
+import this
 
 
 regex = re.compile(r'([FSTB]\d{9})\s+((?:\w+\s\.?)+)\s{2,}((?:\w+\s)+)')
@@ -12,6 +13,7 @@ all_students = []
 
 
 class NoStudentsFoundError(Exception):
+    """Hey"""
     pass
 
 
