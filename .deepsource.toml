@@ -1,18 +1,18 @@
-{
-  "version": 1,
-  "analyzers": [
-      {
-          "name": "python",
-          "enabled": true,
-          "runtime_version": "3.x.x"
-      }
-  ],
-  "test_patterns": [
-      "tests/",
-      "api/test_*.py"
-  ],
-  "exclude_patterns": [
-      "setup.py",
-      "a.py"
-  ]
-}
+
+version = 1
+
+
+test_patterns = [
+  "tests/",
+  "api/test_*.py"
+]
+
+exclude_patterns = [
+  "setup.py",
+  "a.py",
+]
+
+[[analyzers]]
+name = "python"
+enabled = true
+runtime_version = "3.x.x"
