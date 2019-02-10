@@ -7,11 +7,6 @@ test_patterns = [
   "api/test_*.py"
 ]
 
-exclude_patterns = [
-  "setup.py",
-  "a.py",
-]
-
 [[analyzers]]
 name = "python"
 enabled = true
