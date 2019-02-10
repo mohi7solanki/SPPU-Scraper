@@ -6,7 +6,7 @@ import PyPDF2
 
 regex = re.compile(r'([FSTB]\d{9})\s+((?:\w+\s\.?)+)\s{2,}((?:\w+\s)+)')
 
-Student = namedtuple('student', 'seat_no name mother_name')
+Student = namedtuple('student', ['seat_no name mother_name'])
 
 all_students = []
 
