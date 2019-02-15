@@ -3,7 +3,7 @@
 
 """The setup script."""
 
-import json
+import os
 
 from setuptools import setup, find_packages
 
