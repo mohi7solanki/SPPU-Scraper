@@ -2,7 +2,8 @@ import signal
 import sys
 import threading
 import warnings
-]from concurrent.futures import as_completed, ThreadPoolExecutor
+from collections import namedtuple, Counter
+from concurrent.futures import as_completed, ThreadPoolExecutor
 from itertools import chain
 
 import requests
