@@ -6,7 +6,6 @@ from collections import namedtuple, Counter
 from concurrent.futures import as_completed, ThreadPoolExecutor
 from itertools import chain
 
-import requests
 from bs4 import BeautifulSoup
 from requests.exceptions import ConnectionError, ConnectTimeout
 from PyPDF2.utils import PdfReadError
