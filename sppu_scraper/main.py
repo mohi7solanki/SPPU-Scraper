@@ -26,7 +26,7 @@ next_year = {'F': 'S', 'S': 'T', 'T': 'B'}
 
 lock = threading.Lock()
 
-TIMEOUT = 7
+TIMEOUT = 8
 
 
 def keyboard_interrupt_handler(*args):
