@@ -8,8 +8,7 @@ test_patterns = [
 ]
 
 exclude_patterns = [
-  "setup.py",
-  "a.py",
+  "setup.py"
 ]
 
 [[analyzers]]
