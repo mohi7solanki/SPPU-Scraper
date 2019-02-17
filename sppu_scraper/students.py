@@ -12,6 +12,7 @@ all_students = []
 
 
 class NoStudentsFoundError(Exception):
+    """No students are found"""
     pass
 
 
