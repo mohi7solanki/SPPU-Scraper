@@ -4,6 +4,7 @@ import tablib
 
 
 def save_result(fetched_results, output='xlsx'):
+
     subjects = [''.join(subject.keys()) for subject in fetched_results[0].grades]
     data = tablib.Dataset(
         headers=('No', 'Seat No', 'Name', 'SGPA', 'Backlogs', *subjects)
