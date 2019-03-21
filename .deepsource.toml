@@ -4,7 +4,7 @@ version = 1
 
 test_patterns = [
   "tests/",
-  "api/test_*.py"
+  "test_*.py"
 ]
 
 exclude_patterns = [
