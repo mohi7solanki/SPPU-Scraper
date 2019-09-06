@@ -24,6 +24,7 @@ def save_match(all_matches):
 
 
 def get_student_data(filepath):
+    
     with open(filepath, 'rb') as pdf_file:
         pdf_reader = PyPDF2.PdfFileReader(pdf_file)
         for page_no in range(pdf_reader.getNumPages()):
